@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat</title>
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+</head>
+<body>
+
+<div>
+    <input type="button" id="login1" value="login user 2"/>
+</div>
+<div>
+    <input type="button" id="login2" value="login user 3"/>
+</div>
+<div>
+    <input id="name" type="text"/>
+    <input type="button" id="sendBtn" value="send"/>
+</div>
+
+<ul id="msg-list"></ul>
+
+</body>
+
+<script>
+    var $ul = $('#msg-list');
+    var ws;
+    $("#login1").click(function () {
+        ws = new WebSocket("ws://localhost:11000/chat");
+        ws.onmessage = function (e) {
+            $('<li>').text(event.data).appendTo($ul);
+        };
+        var uid = $('#id').val();
+
+        var data = {
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJc3MiOiJnb2xhbmdfY2hhdF9ieXNpciIsIklhdCI6MTQ4MjMxNDAyMSwiRXhwIjoxNTEzODUwMDIxLCJTdWIiOiIyIiwiQXVkIjoiY2hhdCIsIlR5cCI6IlUifQ==.9286ddbf6c5bc352836571584be25d3f3420a3e5a9b918b88a16c756c2824c7b",
+            name: "zl2",
+            head_pic: "pic2"
+        };
+
+        var msg = {
+            type: 4,
+            data: JSON.stringify(data),
+        }
+
+        ws.onopen = function () {
+            ws.send(JSON.stringify(msg));
+        }
+    });
+    $("#login2").click(function () {
+        ws = new WebSocket("ws://localhost:11000/chat");
+        ws.onmessage = function (e) {
+            $('<li>').text(event.data).appendTo($ul);
+        };
+        var uid = $('#id').val();
+
+        var data = {
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJc3MiOiJnb2xhbmdfY2hhdF9ieXNpciIsIklhdCI6MTQ4MjMxNDAyMSwiRXhwIjoxNTEzODUwMDIxLCJTdWIiOiIzIiwiQXVkIjoiY2hhdCIsIlR5cCI6IlUifQ==.c5295649ea2f67fa6090bef66d3c1a9ff5cf72be2cc9b436a27979e5d163af4e",
+            name: "zl3",
+            head_pic: "pic3"
+        };
+
+        var msg = {
+            type: 4,
+            data: JSON.stringify(data),
+        }
+
+        ws.onopen = function () {
+            ws.send(JSON.stringify(msg));
+        }
+    });
+    $('#sendBtn').click(function () {
+        var id = $('#name').val();
+        var msg = {
+            type: 1,
+            data: "test",
+            to: 1,
+            id: new Date().getTime(),
+            to_id: parseInt(id),
+        }
+        ws.send(JSON.stringify(msg));
+    });
+</script>
+</html>
